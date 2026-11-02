@@ -14,3 +14,8 @@ First playable prototype. Models use procedural geometry and articulated groups;
 
 Hosted Site: appgprj_6ae44784d2c881919dbe7f702c75c025
 Three.js license: dist/vendor/LICENSE-three.txt
+
+## Biome scenery
+Each run seeds chunk vegetation independently: desert cacti, snowy alpine pines, meadow broadleaf trees and flowers, lakeside reeds, and stacked rocky outcrops/spires. These are regular destructible objects; their scale updates their collision radius. Startup chunks keep their central vegetation-free corridor. Vegetation is bounded to 12 placements per chunk and uses existing cached primitives/materials. A seed reproduces vegetation regardless of chunk generation order; background mountains still use the original random generator.
+
+Check with `node --check dist/game.js` and `node --test tests/biome-scenery.test.mjs`. To try, serve `dist` with a static HTTP server. Biomes change every 420 m. Use J on the new scenery and start another run for a new layout. GPU visual QA has not been performed for this change.
