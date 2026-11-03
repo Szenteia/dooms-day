@@ -14,3 +14,8 @@ First playable prototype. Models use procedural geometry and articulated groups;
 
 Hosted Site: appgprj_6ae44784d2c881919dbe7f702c75c025
 Three.js license: dist/vendor/LICENSE-three.txt
+
+## Fossil blessings
+Each of the five biome fossils unlocks one permanent next-run blessing: desert increases forward hit range to 10.5 m, mountains block one collision per run, meadows raise starting/max health to four, lakes grant one extra shard per destroyed object, and rocky mountains lower hit cooldown to 0.4 s. Existing fossils are recognized automatically. Blessings are captured at run start; finding a fossil does not change the current run powers. Existing fossil healing/rewards remain. The book shows each discovered effect and current-run status, including a consumed shield.
+
+Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs`. Serve `dist` through a static HTTP server; smash a fossil with J, inspect the book, then start another run to activate it. Existing browser saves retain the same storage key. GPU visual QA has not been performed for this change.
