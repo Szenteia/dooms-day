@@ -14,3 +14,6 @@ First playable prototype. Models use procedural geometry and articulated groups;
 
 Hosted Site: appgprj_6ae44784d2c881919dbe7f702c75c025
 Three.js license: dist/vendor/LICENSE-three.txt
+
+## Creature encounters
+Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
