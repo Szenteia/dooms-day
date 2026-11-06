@@ -48,17 +48,18 @@ export function createMonk(scene, mesh) {
   for (const y of [-1.08, -.16, 1.17]) put('cyl', gold, 0, y, 0, .054, .11, .054, staff);
   put('ball', '#f6d181', 0, 1.37, 0, .112, .14, .11, staff);
 
-  return { root, pose({ phase = 0, speed = 0, steering = 0, airborne = false, attack = 0 } = {}) {
-    const moving = Math.min(1, speed / 12);
-    torso.position.y = airborne ? 0 : Math.abs(Math.sin(phase)) * .065 * moving;
-    torso.rotation.x = airborne ? -.1 : -.13 * moving;
+  return { root, pose({ phase = 0, speed = 0, steering = 0, airborne = false, landing = 0, attack = 0 } = {}) {
+    const compression = airborne ? 0 : T.MathUtils.clamp(landing, 0, 1);
+    const moving = Math.min(1, speed / 12) * (1 - compression * .55);
+    torso.position.y = airborne ? 0 : Math.abs(Math.sin(phase)) * .065 * moving - compression * .18;
+    torso.rotation.x = airborne ? -.1 : -.13 * moving - compression * .16;
     torso.rotation.z = steering * -.2;
     scarf.rotation.x = -.18 - .6 * moving + Math.sin(phase * 1.7) * .18 * moving;
     scarf.rotation.z = steering * .3;
     legs.forEach(({ hip, knee }, i) => {
       const stride = Math.sin(phase + i * Math.PI);
-      hip.rotation.x = airborne ? .55 + i * .32 : stride * .7 * moving;
-      knee.rotation.x = airborne ? -.87 : -Math.max(0, -stride) * .96 * moving;
+      hip.rotation.x = airborne ? .55 + i * .32 : stride * .7 * moving + compression * .45;
+      knee.rotation.x = airborne ? -.87 : -Math.max(0, -stride) * .96 * moving - compression * .8;
       arms[i].shoulder.rotation.x = airborne ? -.65 : -stride * .58 * moving;
       arms[i].elbow.rotation.x = -.48;
     });
