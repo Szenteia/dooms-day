@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { findUpcomingObstacle } from '../dist/obstacle-cue.js';
+import { findUpcomingObstacle, isJumpWindowOpen } from '../dist/obstacle-cue.js';
 
 function obstacle(x, z, height) {
   return {
@@ -30,4 +30,22 @@ test('destroyed, passed, distant objects and creatures do not get a cue', () => 
   ];
   assert.equal(findUpcomingObstacle(objects, 0, 0, 12), null);
   assert.equal(findUpcomingObstacle(objects, 0, 0, 24).distance, 30);
+});
+
+test('jump timing waits for the full obstacle to fit under the arc', () => {
+  const bounds = { min: { z: -10 }, max: { y: 1.25, z: -8 } };
+  assert.equal(isJumpWindowOpen(bounds, 3, 12), false);
+  assert.equal(isJumpWindowOpen(bounds, -3, 12), true);
+  assert.equal(isJumpWindowOpen(bounds, -7.5, 12), false);
+  assert.equal(isJumpWindowOpen(bounds, -3, 5.4), false);
+  assert.equal(isJumpWindowOpen(bounds, -6.1, 5.4), true);
+});
+
+test('a tall or too wide obstacle never gets a jump-now cue', () => {
+  const tall = { min: { z: -10 }, max: { y: 2.9, z: -8 } };
+  const wide = { min: { z: -18 }, max: { y: 1.25, z: -8 } };
+  for (let z = 2; z >= -10; z -= .05) {
+    assert.equal(isJumpWindowOpen(tall, z, 12), false);
+    assert.equal(isJumpWindowOpen(wide, z, 12), false);
+  }
 });

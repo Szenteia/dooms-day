@@ -4,7 +4,7 @@ import { SPECIES, buildCreature, animateCreature } from './creatures.js';
 import { planScenery, buildScenery } from './biome-scenery.js';
 import { RELICS, createRunBlessings } from './relics.js';
 import { canMeetCreature, createCreatureRun, creatureIds } from './encounters.js';
-import { findUpcomingObstacle } from './obstacle-cue.js';
+import { findUpcomingObstacle, isJumpWindowOpen } from './obstacle-cue.js';
 import { createMonk } from './monk.js';
 import { ROAD_WIDTH, JUMP_DURATION, LOW_OBSTACLE_HEIGHT, TALL_OBSTACLE_HEIGHT, isOffRoad, targetRunSpeed, jumpHeight, touchesObstacle } from './movement.js';
 
@@ -42,7 +42,9 @@ function updateObstacleCue() {
   obstacleMarker.children[1].visible=cue.tall;
   stripeMaterial.color.setHex(cue.tall ? 0xffb45e : 0x9ef6da);
 
-  const action=cue.tall ? 'Kerüld ki vagy üsd' : 'Átugorható';
+  const ready = !cue.tall && jumpY === 0 && isJumpWindowOpen(cue.bounds, hero.position.z, speed);
+  const action = cue.tall ? 'Kerüld ki vagy üsd' : ready ? 'Ugorj most' : 'Átugorható';
+  obstacleStatus.classList.toggle('ready', ready);
   const label=action+' · '+Math.ceil(cue.distance)+' m';
   if (obstacleStatus.textContent!==label) obstacleStatus.textContent=label;
   obstacleStatus.classList.toggle('tall',cue.tall);
