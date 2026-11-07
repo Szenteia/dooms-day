@@ -18,3 +18,8 @@
   pointer-events: none;
 }
 #obstacle-status.tall { color: #ffb45e; }
+#obstacle-status.ready {
+  background: #9ef6da;
+  color: #102b35;
+  font-weight: 700;
+}

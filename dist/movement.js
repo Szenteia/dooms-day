@@ -1,3 +1,4 @@
+export const RUNNER_HALF_DEPTH = .24;
 export const ROAD_WIDTH = 9;
 export const OFF_ROAD_FACTOR = 0.45;
 export const JUMP_DURATION = 1;
@@ -22,6 +23,6 @@ export function jumpHeight(elapsed) {
 
 export function touchesObstacle(bounds, x, z, feetY) {
   return x + 0.28 > bounds.min.x && x - 0.28 < bounds.max.x
-    && z + 0.24 > bounds.min.z && z - 0.24 < bounds.max.z
+    && z + RUNNER_HALF_DEPTH > bounds.min.z && z - RUNNER_HALF_DEPTH < bounds.max.z
     && feetY < bounds.max.y;
 }
