@@ -1,7 +1,8 @@
+import { createBiomeAtmosphere } from './biome-atmosphere.js';
 import * as T from './vendor/three.module.js';
 import { createDestruction } from './destruction.js';
 import { SPECIES, buildCreature, animateCreature } from './creatures.js';
-import { planScenery, buildScenery } from './biome-scenery.js';
+import { BIOME_LENGTH as SPAN, planScenery, buildScenery } from './biome-scenery.js';
 import { RELICS, createRunBlessings } from './relics.js';
 import { canMeetCreature, createCreatureRun, creatureIds } from './encounters.js';
 import { findUpcomingObstacle } from './obstacle-cue.js';
@@ -10,11 +11,13 @@ import { ROAD_WIDTH, JUMP_DURATION, LOW_OBSTACLE_HEIGHT, TALL_OBSTACLE_HEIGHT, i
 
 let blessings=createRunBlessings([]);
 const $=s=>document.querySelector(s);let save;try{save=JSON.parse(localStorage.getItem('dooms-day-v1'))}catch{}save={best:0,shards:0,creatures:[],fossils:[],runs:0,...save};save.creatures=creatureIds(save.creatures);const persist=()=>{try{localStorage.setItem('dooms-day-v1',JSON.stringify(save))}catch{}};
-let renderer;try{renderer=new T.WebGLRenderer({canvas:$('#world'),antialias:true})}catch(e){$('#loading').textContent='A 3D játékhoz WebGL szükséges. Engedélyezd a böngésző hardveres gyorsítását, majd töltsd újra az oldalt.';throw e}renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;const scene=new T.Scene();scene.background=new T.Color('#cfa880');scene.fog=new T.FogExp2('#cfa880',.007);const camera=new T.PerspectiveCamera(52,innerWidth/innerHeight,.1,500);scene.add(new T.HemisphereLight('#ffe9c5','#466575',2.5));const sun=new T.DirectionalLight('#ffd9a0',3);sun.position.set(-35,65,-50);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-32,right:32,top:60,bottom:-45});scene.add(sun);scene.add(sun.target);
+let renderer;try{renderer=new T.WebGLRenderer({canvas:$('#world'),antialias:true})}catch(e){$('#loading').textContent='A 3D játékhoz WebGL szükséges. Engedélyezd a böngésző hardveres gyorsítását, majd töltsd újra az oldalt.';throw e}renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;const scene=new T.Scene();scene.background=new T.Color('#cfa880');scene.fog=new T.FogExp2('#cfa880',.007);const camera=new T.PerspectiveCamera(52,innerWidth/innerHeight,.1,500);const hemisphere=new T.HemisphereLight('#ffe9c5','#466575',2.5);scene.add(hemisphere);const sun=new T.DirectionalLight('#ffd9a0',3);sun.position.set(-35,65,-50);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-32,right:32,top:60,bottom:-45});scene.add(sun);scene.add(sun.target);
+const updateAtmosphere = createBiomeAtmosphere(scene, hemisphere, sun);
+updateAtmosphere(0);
 const destruction=createDestruction(scene);
 const mats=new Map(),geo={box:new T.BoxGeometry(1,1,1),ball:new T.IcosahedronGeometry(1,1),cone:new T.ConeGeometry(1,1,7),cyl:new T.CylinderGeometry(1,1,1,8)};function mat(c){if(!mats.has(c))mats.set(c,new T.MeshStandardMaterial({color:c,roughness:.85}));return mats.get(c)}function mesh(g,c,x=0,y=0,z=0,sx=1,sy=1,sz=1,parent=scene){const m=new T.Mesh(geo[g],mat(c));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=m.receiveShadow=true;parent.add(m);return m}
-const biomes=[{name:'Aranyló sivatag',ground:'#ce995d',rock:'#aa7654',tree:'#8a9356',sky:'#d6af87'},{name:'A felhők kapuja',ground:'#9c9d92',rock:'#777e87',tree:'#486e6a',sky:'#b7cdd3'},{name:'Smaragd rétek',ground:'#719477',rock:'#818d87',tree:'#2d7161',sky:'#accbba'},{name:'Ezer tükör vidéke',ground:'#638e87',rock:'#849d9a',tree:'#427a72',sky:'#a0ccd1'},{name:'Az ősi gerinc',ground:'#7c8590',rock:'#626d7e',tree:'#43696b',sky:'#b0bccc'}];
-let state='menu',distance=0,hp=3,shards=0,lane=0,x=0,jumpElapsed=JUMP_DURATION,jumpY=0,speed=12,stridePhase=0,attack=0,cooldown=0,invul=0,nextChunk=0,time=0,biomeIndex=-1,creatureRun=createCreatureRun(save.creatures),chunks=[],objects=[],found=0;const LENGTH=32,SPAN=420;const rand=(a,b)=>a+Math.random()*(b-a);const monk=createMonk(scene,mesh);
+const biomes=[{name:'Aranyló sivatag',ground:'#ce995d',rock:'#aa7654',tree:'#8a9356'},{name:'A felhők kapuja',ground:'#9c9d92',rock:'#777e87',tree:'#486e6a'},{name:'Smaragd rétek',ground:'#719477',rock:'#818d87',tree:'#2d7161'},{name:'Ezer tükör vidéke',ground:'#638e87',rock:'#849d9a',tree:'#427a72'},{name:'Az ősi gerinc',ground:'#7c8590',rock:'#626d7e',tree:'#43696b'}];
+let state='menu',distance=0,hp=3,shards=0,lane=0,x=0,jumpElapsed=JUMP_DURATION,jumpY=0,speed=12,stridePhase=0,attack=0,cooldown=0,invul=0,nextChunk=0,time=0,biomeIndex=-1,creatureRun=createCreatureRun(save.creatures),chunks=[],objects=[],found=0;const LENGTH=32;const rand=(a,b)=>a+Math.random()*(b-a);const monk=createMonk(scene,mesh);
 const hero=monk.root;
 const groundStatus=$('#ground-status');
 const obstacleStatus=$('#obstacle-status');
@@ -74,7 +77,9 @@ for(let i=0;i<10;i++)chunk(nextChunk++);$('#loading').hidden=true;const clock=ne
 const offRoad=isOffRoad(x);
 speed=T.MathUtils.damp(speed,targetRunSpeed(distance,x),14,dt);
 groundStatus.hidden=!offRoad;
-distance+=dt*speed;hero.position.z=-distance;while(nextChunk*LENGTH<distance+270)chunk(nextChunk++);for(let i=chunks.length-1;i>=0;i--)if(chunks[i].z>hero.position.z+70){scene.remove(chunks[i].g);chunks.splice(i,1)}objects=objects.filter(o=>o.z<hero.position.z+70);hero.position.x=x;
+distance+=dt*speed;
+updateAtmosphere(distance);
+hero.position.z=-distance;while(nextChunk*LENGTH<distance+270)chunk(nextChunk++);for(let i=chunks.length-1;i>=0;i--)if(chunks[i].z>hero.position.z+70){scene.remove(chunks[i].g);chunks.splice(i,1)}objects=objects.filter(o=>o.z<hero.position.z+70);hero.position.x=x;
 jumpElapsed=Math.min(JUMP_DURATION,jumpElapsed+dt);
 jumpY=jumpHeight(jumpElapsed);
 hero.position.y=jumpY;
@@ -103,7 +108,7 @@ if (canMeetCreature(x, hero.position.z, o.x, o.z)) {
   }
 }
 }else if(touchesObstacle(o.bounds,x,hero.position.z,jumpY)){o.done=true;destruction.shatter(o.g,o.kind);if(invul<=0){const protectedHit=blessings.absorbHit();if(!protectedHit)hp--;invul=1.5;toast(protectedHit?'✦ A magaslat oltalma kivédte az ütközést!':(o.bounds.max.y>LOW_OBSTACLE_HEIGHT+.01?'Magas akadály · kerüld ki vagy üss J-vel.':'Alacsony akadály · ugorj korábban vagy üss J-vel.'));if(hp<=0){end();break}}}}
-let bi=Math.floor(distance/SPAN)%5;if(bi!==biomeIndex){biomeIndex=bi;$('#biome').textContent=biomes[bi].name;$('#chapter').textContent=['I · AZ ÉBREDÉS','II · A MAGASLAT','III · ÚJJÁSZÜLETÉS','IV · VÍZTÜKÖR','V · AZ ŐSI GERINC'][bi];scene.background.set(biomes[bi].sky);scene.fog.color.set(biomes[bi].sky);if(distance>10)toast(biomes[bi].name)}$('#distance').textContent=Math.floor(distance)+' m';$('#shards').textContent=shards;$('#health').textContent='● '.repeat(Math.max(0,hp));$('#progress').style.width=(distance%SPAN/SPAN*100)+'%'}
+let bi=Math.floor(distance/SPAN)%5;if(bi!==biomeIndex){biomeIndex=bi;$('#biome').textContent=biomes[bi].name;$('#chapter').textContent=['I · AZ ÉBREDÉS','II · A MAGASLAT','III · ÚJJÁSZÜLETÉS','IV · VÍZTÜKÖR','V · AZ ŐSI GERINC'][bi];if(distance>10)toast(biomes[bi].name)}$('#distance').textContent=Math.floor(distance)+' m';$('#shards').textContent=shards;$('#health').textContent='● '.repeat(Math.max(0,hp));$('#progress').style.width=(distance%SPAN/SPAN*100)+'%'}
 if(state==='run')destruction.update(dt);
 updateObstacleCue();
 let z=hero.position.z;if(state==='menu'){hero.position.set(2,0,0);monk.pose();camera.position.set(16,9,25);camera.lookAt(0,2,-23)}else{camera.position.lerp(new T.Vector3(x*.4,6.8+jumpY*.2,z+12),.09);camera.lookAt(x*.3,1.7,z-15)}sun.position.set(x-35,65,z-50);sun.target.position.set(x,0,z-30);renderer.render(scene,camera)}frame();
