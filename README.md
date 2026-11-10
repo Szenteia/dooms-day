@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Shrine departure
+
+The title screen introduces the prophecy. Every run starts in the shrine courtyard and takes the runner through a roofed gateway at 11 m. The gateway is a landmark with a clear opening across the playable lanes. Its flags move during the run and freeze on pause. Serve `dist` and start a run to see the courtyard and gate.
