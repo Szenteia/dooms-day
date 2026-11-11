@@ -43,16 +43,32 @@ export function createMonk(scene, mesh) {
     arms.push({ shoulder, elbow });
   }
   const staff = joint(arms[1].elbow, 0, -.34, 0);
+  staff.name = 'Monk staff';
   staff.rotation.z = -.17;
   put('cyl', '#59392e', 0, .07, 0, .038, 2.48, .038, staff);
   for (const y of [-1.08, -.16, 1.17]) put('cyl', gold, 0, y, 0, .054, .11, .054, staff);
   put('ball', '#f6d181', 0, 1.37, 0, .112, .14, .11, staff);
 
+  const swingMaterial = new T.MeshBasicMaterial({
+    color: '#ffd18a', transparent: true, opacity: 0,
+    depthWrite: false, side: T.DoubleSide, toneMapped: false,
+  });
+  const swingArc = new T.Mesh(new T.RingGeometry(1.25, 1.38, 32, 1, 0, Math.PI), swingMaterial);
+  swingArc.name = 'Staff swing arc';
+  swingArc.position.set(0, 1.6, -.7);
+  swingArc.rotation.x = -Math.PI / 2;
+  swingArc.visible = false;
+  root.add(swingArc);
+
   return { root, pose({ phase = 0, speed = 0, steering = 0, airborne = false, attack = 0 } = {}) {
     const moving = Math.min(1, speed / 12);
+    const remaining = T.MathUtils.clamp(attack, 0, 1);
+    const swing = Math.sin(remaining * Math.PI) ** 2;
     torso.position.y = airborne ? 0 : Math.abs(Math.sin(phase)) * .065 * moving;
     torso.rotation.x = airborne ? -.1 : -.13 * moving;
     torso.rotation.z = steering * -.2;
+    torso.rotation.y = -.45 * swing;
+    torso.rotation.x -= .14 * swing;
     scarf.rotation.x = -.18 - .6 * moving + Math.sin(phase * 1.7) * .18 * moving;
     scarf.rotation.z = steering * .3;
     legs.forEach(({ hip, knee }, i) => {
@@ -62,7 +78,16 @@ export function createMonk(scene, mesh) {
       arms[i].shoulder.rotation.x = airborne ? -.65 : -stride * .58 * moving;
       arms[i].elbow.rotation.x = -.48;
     });
-    arms[1].shoulder.rotation.y = attack ? Math.sin(attack * Math.PI) * -1.1 : 0;
-    if (attack) arms[1].shoulder.rotation.x = -1.65 * Math.sin(attack * Math.PI);
+    arms[1].shoulder.rotation.y = -1.1 * swing;
+    arms[1].shoulder.rotation.x = T.MathUtils.lerp(arms[1].shoulder.rotation.x, -1.65, swing);
+    arms[1].elbow.rotation.x += .3 * swing;
+    arms[0].shoulder.rotation.x = T.MathUtils.lerp(arms[0].shoulder.rotation.x, -.8, swing * .6);
+    arms[0].elbow.rotation.x -= .35 * swing;
+    staff.rotation.x = -.7 * swing;
+    staff.rotation.z = -.17 + .6 * swing;
+    swingArc.visible = remaining > 0 && remaining < 1;
+    swingArc.rotation.z = (1 - remaining - .5) * .65;
+    swingArc.scale.setScalar(1 + .35 * swing);
+    swingMaterial.opacity = .5 * swing;
   }};
 }
