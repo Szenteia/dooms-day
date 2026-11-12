@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Fossil models
+
+The five biome fossils have their own stone reliefs: a spiral shell, trilobite, fern, fish skeleton and claw print. The relief faces the approaching runner and its bones become debris when smashed. All parts use cached primitives and materials. Serve `dist`, steer left to the first fossil at 112 m, and press J to discover the desert relic. Later biomes show the other forms.

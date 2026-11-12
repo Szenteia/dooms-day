@@ -2,6 +2,7 @@ import * as T from './vendor/three.module.js';
 import { createDestruction } from './destruction.js';
 import { SPECIES, buildCreature, animateCreature } from './creatures.js';
 import { planScenery, buildScenery } from './biome-scenery.js';
+import { buildFossil } from './fossils.js';
 import { RELICS, createRunBlessings } from './relics.js';
 import { canMeetCreature, createCreatureRun, creatureIds } from './encounters.js';
 import { findUpcomingObstacle } from './obstacle-cue.js';
@@ -52,7 +53,7 @@ function updateObstacleCue() {
 function temple(){const g=new T.Group();scene.add(g);g.position.z=13;mesh('box','#bca685',0,.1,0,13,.4,11,g);for(let k=0;k<3;k++){mesh('box','#b5825b',0,1+k*2.5,0,8-k*1.6,2,6-k,g);const roof=mesh('cone','#354d4b',0,2.8+k*2.5,0,7-k,1.3,5-k*.6,g);roof.rotation.y=Math.PI/4}for(let s of [-1,1]){mesh('cyl','#a3523b',s*5,2,0,.25,4,.25,g);mesh('box','#394f49',s*5,4,0,3,.4,2,g)}mesh('ball','#e6b760',0,9,0,.25,.5,.25,g);return g}const shrine=temple();
 const species=SPECIES;
 let worldSeed=(Math.random()*4294967296)>>>0;
-function spawn(kind,xx,zz,b,chunk,scale=1,rotation=0){const g=new T.Group();g.position.set(xx,0,zz);chunk.add(g);let rig=null;if(['tree','bush','rock'].includes(kind)){buildScenery(kind,biomes.indexOf(b),g,mesh,b)}else if(kind==='fossil'){mesh('ball','#b99973',0,.7,0,1.1,.8,.8,g);const ring=new T.Mesh(new T.TorusGeometry(.43,.08,6,16),mat('#ffe4ac'));ring.position.set(0,.8,-.66);g.add(ring);mesh('ball','#ffe4ac',0,.8,-.68,.12,.12,.1,g)}else if(kind==='creature'){rig=buildCreature(Math.floor((-zz)/SPAN)%5,g,mesh)}else if(kind==='cave'){mesh('ball',b.rock,-1,1,0,1,1.7,1.2,g);mesh('ball',b.rock,1,1,0,1,1.7,1.2,g);mesh('box',b.rock,0,2.3,0,3,1,2,g)}else{mesh('ball',b.rock,0,.7,0,rand(.6,1.2),rand(.6,1.4),.85,g)}let bounds=null;
+function spawn(kind,xx,zz,b,chunk,scale=1,rotation=0){const g=new T.Group();g.position.set(xx,0,zz);chunk.add(g);let rig=null;if(['tree','bush','rock'].includes(kind)){buildScenery(kind,biomes.indexOf(b),g,mesh,b)}else if(kind==='fossil'){buildFossil(Math.floor((-zz)/SPAN)%5,g,mesh)}else if(kind==='creature'){rig=buildCreature(Math.floor((-zz)/SPAN)%5,g,mesh)}else if(kind==='cave'){mesh('ball',b.rock,-1,1,0,1,1.7,1.2,g);mesh('ball',b.rock,1,1,0,1,1.7,1.2,g);mesh('box',b.rock,0,2.3,0,3,1,2,g)}else{mesh('ball',b.rock,0,.7,0,rand(.6,1.2),rand(.6,1.4),.85,g)}let bounds=null;
 if(kind!=='creature'){
   g.scale.setScalar(scale);
   g.rotation.y=rotation;
