@@ -18,3 +18,23 @@
   pointer-events: none;
 }
 #obstacle-status.tall { color: #ffb45e; }
+
+#encounter-status {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 40px);
+  padding: 9px 14px;
+  border: 1px solid currentColor;
+  border-radius: 10px;
+  background: #132b30ec;
+  color: #f9bd65;
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+  white-space: pre-line;
+  pointer-events: none;
+}
+#encounter-status.unlocked { color: #9ef6da; }
