@@ -1,4 +1,6 @@
 const SPECIES_COUNT = 5;
+export const ENCOUNTER_WIDTH = 2.6;
+export const ENCOUNTER_DEPTH = 5;
 
 export function creatureIds(value) {
   if (!Array.isArray(value)) return [];
@@ -6,7 +8,7 @@ export function creatureIds(value) {
 }
 
 export function canMeetCreature(playerX, playerZ, creatureX, creatureZ) {
-  return Math.abs(playerX - creatureX) <= 2.6 && Math.abs(playerZ - creatureZ) <= 5;
+  return Math.abs(playerX - creatureX) <= ENCOUNTER_WIDTH && Math.abs(playerZ - creatureZ) <= ENCOUNTER_DEPTH;
 }
 
 export function createCreatureRun(knownIds) {

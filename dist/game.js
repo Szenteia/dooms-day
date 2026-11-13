@@ -4,6 +4,7 @@ import { SPECIES, buildCreature, animateCreature } from './creatures.js';
 import { planScenery, buildScenery } from './biome-scenery.js';
 import { RELICS, createRunBlessings } from './relics.js';
 import { canMeetCreature, createCreatureRun, creatureIds } from './encounters.js';
+import { createEncounterCue } from './encounter-cue.js';
 import { findUpcomingObstacle } from './obstacle-cue.js';
 import { createMonk } from './monk.js';
 import { ROAD_WIDTH, JUMP_DURATION, LOW_OBSTACLE_HEIGHT, TALL_OBSTACLE_HEIGHT, isOffRoad, targetRunSpeed, jumpHeight, touchesObstacle } from './movement.js';
@@ -17,6 +18,7 @@ const biomes=[{name:'Aranyló sivatag',ground:'#ce995d',rock:'#aa7654',tree:'#8a
 let state='menu',distance=0,hp=3,shards=0,lane=0,x=0,jumpElapsed=JUMP_DURATION,jumpY=0,speed=12,stridePhase=0,attack=0,cooldown=0,invul=0,nextChunk=0,time=0,biomeIndex=-1,creatureRun=createCreatureRun(save.creatures),chunks=[],objects=[],found=0;const LENGTH=32,SPAN=420;const rand=(a,b)=>a+Math.random()*(b-a);const monk=createMonk(scene,mesh);
 const hero=monk.root;
 const groundStatus=$('#ground-status');
+const updateEncounterCue=createEncounterCue(scene,$('#encounter-status'));
 const obstacleStatus=$('#obstacle-status');
 const obstacleMarker=new T.Group();
 const stripeGeometry=new T.PlaneGeometry(1, .14);
@@ -106,4 +108,5 @@ if (canMeetCreature(x, hero.position.z, o.x, o.z)) {
 let bi=Math.floor(distance/SPAN)%5;if(bi!==biomeIndex){biomeIndex=bi;$('#biome').textContent=biomes[bi].name;$('#chapter').textContent=['I · AZ ÉBREDÉS','II · A MAGASLAT','III · ÚJJÁSZÜLETÉS','IV · VÍZTÜKÖR','V · AZ ŐSI GERINC'][bi];scene.background.set(biomes[bi].sky);scene.fog.color.set(biomes[bi].sky);if(distance>10)toast(biomes[bi].name)}$('#distance').textContent=Math.floor(distance)+' m';$('#shards').textContent=shards;$('#health').textContent='● '.repeat(Math.max(0,hp));$('#progress').style.width=(distance%SPAN/SPAN*100)+'%'}
 if(state==='run')destruction.update(dt);
 updateObstacleCue();
+updateEncounterCue(objects,x,hero.position.z,save.creatures,creatureRun.discoveries,state==='run');
 let z=hero.position.z;if(state==='menu'){hero.position.set(2,0,0);monk.pose();camera.position.set(16,9,25);camera.lookAt(0,2,-23)}else{camera.position.lerp(new T.Vector3(x*.4,6.8+jumpY*.2,z+12),.09);camera.lookAt(x*.3,1.7,z-15)}sun.position.set(x-35,65,z-50);sun.target.position.set(x,0,z-30);renderer.render(scene,camera)}frame();

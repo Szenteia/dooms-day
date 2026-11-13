@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Encounter guidance
+
+Creatures within 32 m receive a ground ring and a persistent direction/distance hint. Gold marks a discovery available from the next run, while jade marks an unlocked creature offering a blessing. The hint hides after the encounter, when passed, or while paused. To try, serve `dist` and follow the leftward hint for the first fox at 72 m. Start another run after discovering it to see the blessing cue.
