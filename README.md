@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Progress checkpoints
+
+Earned shards are banked immediately, including creature blessings. The best distance checkpoints every 25 m and on page hide or tab backgrounding. Returning to the temple banks only rewards earned since the previous checkpoint. To try, smash a stone, reload before the run ends, and inspect the book's shard total and record. Saves use the existing browser storage key. If browser storage is unavailable, progress stays in memory until a later successful write.
