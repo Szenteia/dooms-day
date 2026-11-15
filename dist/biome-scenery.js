@@ -2,15 +2,19 @@ export const CHUNK_LENGTH = 32;
 export const BIOME_LENGTH = 420;
 export const biomeAt = distance => Math.floor(Math.max(0, distance) / BIOME_LENGTH) % 5;
 
-// A chunk's layout is independent of the order in which chunks are requested.
-export function planScenery(chunkIndex, runSeed) {
+function chunkRandom(chunkIndex, runSeed) {
   let seed = ((runSeed >>> 0) ^ Math.imul(chunkIndex + 1, 0x9e3779b1)) >>> 0;
-  const random = () => {
+  return () => {
     seed = (seed + 0x6d2b79f5) >>> 0;
     let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
     t ^= t + Math.imul(t ^ t >>> 7, 61 | t);
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
+}
+
+// A chunk's layout is independent of the order in which chunks are requested.
+export function planScenery(chunkIndex, runSeed) {
+  const random = chunkRandom(chunkIndex, runSeed);
   const result = [];
   for(let i=0;i<12;i++) {
     const distance = chunkIndex * CHUNK_LENGTH + random() * CHUNK_LENGTH;
@@ -23,6 +27,26 @@ export function planScenery(chunkIndex, runSeed) {
       biome:biomeAt(distance), scale, rotation });
   }
   return result;
+}
+
+// One planned obstacle per chunk; every third chunk still offers a fossil.
+export function planTrailObstacle(chunkIndex, runSeed) {
+  if (chunkIndex === 0) return null;
+  if (chunkIndex <= 3) {
+    return {
+      kind: ['rock', 'cave', 'fossil'][chunkIndex - 1],
+      x: [0, 3, -3][chunkIndex - 1],
+      z: -chunkIndex * CHUNK_LENGTH - 16,
+      biome: 0,
+    };
+  }
+  const random = chunkRandom(chunkIndex, (runSeed >>> 0) ^ 0x51ed270b);
+  const x = [-3, 0, 3][Math.floor(random() * 3)];
+  const roll = random();
+  const distance = chunkIndex * CHUNK_LENGTH + 10 + random() * 12;
+  const kind = chunkIndex % 3 === 0 ? 'fossil'
+    : roll < .25 ? 'cave' : roll < .5 ? 'bush' : 'rock';
+  return {kind, x, z: -distance, biome: biomeAt(distance)};
 }
 
 // All meshes belong to the destructible object's group and share cached assets.
