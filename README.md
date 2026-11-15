@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Procedural trail obstacles
+
+After the first fossil, the planned trail obstacle in each chunk varies its lane, type and position with the run seed. Caves, bushes and rocks mix with a fossil every third chunk. Planned obstacles stay at least 20 m apart and use the biome at their actual position. The opening rock (48 m), gate (80 m) and fossil (112 m) retain their tutorial locations. Start two runs and compare the trail beyond 112 m. Validate with `node --test tests/trail.test.mjs`.
