@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Touch swipes
+
+Swipe on the game canvas to change lane (left/right), jump (up), or smash (down). A swipe needs at least 32 CSS pixels within 600 ms and a clear dominant direction. Each touch fires once. Multiple fingers, canceled pointers, and gestures interrupted by pause or menus are discarded. The title screen shows the gesture hints on coarse-pointer devices. Serve `dist` on a touch device and try each direction. Validate with `node --test tests/swipe-controls.test.mjs`.
