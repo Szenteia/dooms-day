@@ -18,3 +18,9 @@
   pointer-events: none;
 }
 #obstacle-status.tall { color: #ffb45e; }
+
+#world { touch-action: none; }
+#menu .swipe-hint { display: none; font-size: 11px; line-height: 1.6; }
+@media (pointer: coarse) {
+  #menu .swipe-hint { display: block; }
+}
