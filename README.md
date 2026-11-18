@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Footstep dust
+
+Grounded running emits a short dust trail, with denser puffs on the verge and a terrain-colored tint off road. Jumping stops emission, pausing freezes the trail and a new run clears it. The effect reuses one instanced mesh with a fixed 24-particle pool. To try, run forward, steer off the road and jump. Validate with `node --test tests/foot-dust.test.mjs`.
