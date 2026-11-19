@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Lake water and ripples
+
+Lake water sits above the ground and below the road surface. Animated rings spread across the water strips with a fixed pool of up to 24 instances. They stream with the runner, stop on pause and reset on a new run. Serve `dist` and reach the fourth biome (around 1260–1696 m) to inspect the water on both sides of the road. Validate with `node --test tests/lake-ripples.test.mjs`.
