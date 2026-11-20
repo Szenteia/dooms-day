@@ -6,9 +6,14 @@ export const RELICS = Object.freeze([
   Object.freeze({name:'A gerinc ereje', effect:'Gyorsabb ütés (0,4 mp várakozás)'}),
 ]);
 
+export function relicIds(value) {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.filter(id=>Number.isInteger(id)&&id>=0&&id<RELICS.length))];
+}
+
 // Capture owned relics once, at the temple: discoveries affect the next run only.
 export function createRunBlessings(fossils) {
-  const owned = new Set(Array.isArray(fossils) ? fossils.filter(id=>Number.isInteger(id)&&id>=0&&id<RELICS.length) : []);
+  const owned = new Set(relicIds(fossils));
   const active = Object.freeze([...owned].sort((a,b)=>a-b));
   let shield = owned.has(1) ? 1 : 0;
   return Object.freeze({

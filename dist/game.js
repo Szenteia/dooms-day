@@ -1,15 +1,16 @@
 import * as T from './vendor/three.module.js';
+import { readProgress } from './save.js';
 import { createDestruction } from './destruction.js';
 import { SPECIES, buildCreature, animateCreature } from './creatures.js';
 import { planScenery, buildScenery } from './biome-scenery.js';
 import { RELICS, createRunBlessings } from './relics.js';
-import { canMeetCreature, createCreatureRun, creatureIds } from './encounters.js';
+import { canMeetCreature, createCreatureRun } from './encounters.js';
 import { findUpcomingObstacle } from './obstacle-cue.js';
 import { createMonk } from './monk.js';
 import { ROAD_WIDTH, JUMP_DURATION, LOW_OBSTACLE_HEIGHT, TALL_OBSTACLE_HEIGHT, isOffRoad, targetRunSpeed, jumpHeight, touchesObstacle } from './movement.js';
 
 let blessings=createRunBlessings([]);
-const $=s=>document.querySelector(s);let save;try{save=JSON.parse(localStorage.getItem('dooms-day-v1'))}catch{}save={best:0,shards:0,creatures:[],fossils:[],runs:0,...save};save.creatures=creatureIds(save.creatures);const persist=()=>{try{localStorage.setItem('dooms-day-v1',JSON.stringify(save))}catch{}};
+const $=s=>document.querySelector(s);const save=readProgress(()=>localStorage.getItem('dooms-day-v1'));const persist=()=>{try{localStorage.setItem('dooms-day-v1',JSON.stringify(save))}catch{}};
 let renderer;try{renderer=new T.WebGLRenderer({canvas:$('#world'),antialias:true})}catch(e){$('#loading').textContent='A 3D játékhoz WebGL szükséges. Engedélyezd a böngésző hardveres gyorsítását, majd töltsd újra az oldalt.';throw e}renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;const scene=new T.Scene();scene.background=new T.Color('#cfa880');scene.fog=new T.FogExp2('#cfa880',.007);const camera=new T.PerspectiveCamera(52,innerWidth/innerHeight,.1,500);scene.add(new T.HemisphereLight('#ffe9c5','#466575',2.5));const sun=new T.DirectionalLight('#ffd9a0',3);sun.position.set(-35,65,-50);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-32,right:32,top:60,bottom:-45});scene.add(sun);scene.add(sun.target);
 const destruction=createDestruction(scene);
 const mats=new Map(),geo={box:new T.BoxGeometry(1,1,1),ball:new T.IcosahedronGeometry(1,1),cone:new T.ConeGeometry(1,1,7),cyl:new T.CylinderGeometry(1,1,1,8)};function mat(c){if(!mats.has(c))mats.set(c,new T.MeshStandardMaterial({color:c,roughness:.85}));return mats.get(c)}function mesh(g,c,x=0,y=0,z=0,sx=1,sy=1,sz=1,parent=scene){const m=new T.Mesh(geo[g],mat(c));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=m.receiveShadow=true;parent.add(m);return m}
