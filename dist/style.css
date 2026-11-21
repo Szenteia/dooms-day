@@ -18,3 +18,18 @@
   pointer-events: none;
 }
 #obstacle-status.tall { color: #ffb45e; }
+
+#resume-countdown {
+  position: fixed;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px 28px;
+  border: 1px solid #f9bd65;
+  border-radius: 16px;
+  background: #102b35ed;
+  color: #ffe4b3;
+  font: 700 clamp(24px, 5vw, 40px) 'Space Grotesk', sans-serif;
+  white-space: nowrap;
+  pointer-events: none;
+}

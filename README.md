@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Resume countdown
+
+Continuing a paused run or closing the book after opening it during a run starts a three-second countdown. Gameplay inputs and simulation wait for the countdown. Pausing again or backgrounding the tab cancels it; continuing starts a fresh three seconds. Serve `dist`, pause near an obstacle, continue and inspect the 3–2–1 display. Validate with `node --test tests/resume-countdown.test.mjs`.
