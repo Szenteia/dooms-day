@@ -18,3 +18,22 @@
   pointer-events: none;
 }
 #obstacle-status.tall { color: #ffb45e; }
+
+#chain-status {
+  position: absolute;
+  top: 180px;
+  right: 38px;
+  width: max-content;
+  max-width: calc(100vw - 40px);
+  padding: 9px 16px;
+  border: 1px solid #f9bd6580;
+  border-radius: 10px;
+  background: #102b35e6;
+  color: #ffda98;
+  font-size: 12px;
+  text-align: center;
+  pointer-events: none;
+}
+.chain-track { height: 3px; margin-top: 7px; background: #ffffff25; }
+#chain-time { display: block; height: 100%; background: #f9bd65; }
+@media(max-width:700px) { #chain-status { top: 145px; right: 20px; } }

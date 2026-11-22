@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Smash chains
+
+Smashing another object within 2.5 seconds raises a chain bonus from +0 to +4 shards per object. Each smashed object refreshes the window, including multiple objects in one strike. A HUD bar shows the remaining time from the second object onward. Damage breaks the chain; a relic shield that prevents damage preserves it. Pause freezes the window and a new run clears it. Serve `dist` and smash nearby scenery in quick succession. Validate with `node --test tests/smash-chain.test.mjs`.
