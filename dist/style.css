@@ -18,3 +18,13 @@
   pointer-events: none;
 }
 #obstacle-status.tall { color: #ffb45e; }
+
+#impact-feedback {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 52%, #a83230 100%);
+}
+#impact-feedback.shield {
+  background: radial-gradient(ellipse at center, transparent 62%, #e6b760 100%);
+}
