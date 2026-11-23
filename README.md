@@ -34,3 +34,7 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Impact feedback
+
+Damage briefly tints the screen edges red. A collision blocked by the mountain fossil instead produces a gold edge tint and an expanding wireframe shield around the runner. Effects freeze on pause and clear on a new run or game over. The shield reuses one mesh and material. Serve `dist` and collide with the opening stone at 48 m; repeat with the mountain fossil unlocked to see the shield. Validate with `node --test tests/impact-feedback.test.mjs`.
