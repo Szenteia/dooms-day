@@ -34,3 +34,10 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Gamepad controls
+Standard-layout gamepads work without login or new dependencies. Press a controller button to expose it to the browser, then release and press Start to begin/restart or toggle pause. Left stick / D-pad changes one lane per tilt/press, the bottom face button (A / Cross) jumps, and the left face button (X / Square) smashes. Center the stick to repeat the same direction. Keyboard and touch remain available at the same time.
+
+Held inputs are consumed on connection, reconnection and return from a hidden tab; they must be released before the same action can fire again. Start takes priority over simultaneous actions. Opening the discovery book still requires the existing UI; Start never dismisses it. Only the first connected standard-layout controller is used; custom mappings are ignored. The menu shows the controls when a supported pad is detected. Browser permission/API failures fall back to existing controls.
+
+Validate with `node --test tests/*.mjs` and `node --check dist/game.js`. Serve `dist`, connect a standard controller, release controls, press Start, then try lane changes, jump, smash and pause. Test held buttons, unplug/replug and switching tabs. Physical-controller and GPU visual QA remain manual checks.
