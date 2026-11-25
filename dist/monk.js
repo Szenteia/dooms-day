@@ -1,3 +1,4 @@
+import { createMonkGarments } from './monk-garments.js';
 import * as T from './vendor/three.module.js';
 
 export function createMonk(scene, mesh) {
@@ -48,7 +49,10 @@ export function createMonk(scene, mesh) {
   for (const y of [-1.08, -.16, 1.17]) put('cyl', gold, 0, y, 0, .054, .11, .054, staff);
   put('ball', '#f6d181', 0, 1.37, 0, .112, .14, .11, staff);
 
+  const poseGarments = createMonkGarments(torso, mesh);
+
   return { root, pose({ phase = 0, speed = 0, steering = 0, airborne = false, attack = 0 } = {}) {
+    poseGarments({phase, speed, steering, airborne});
     const moving = Math.min(1, speed / 12);
     torso.position.y = airborne ? 0 : Math.abs(Math.sin(phase)) * .065 * moving;
     torso.rotation.x = airborne ? -.1 : -.13 * moving;

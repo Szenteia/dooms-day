@@ -34,3 +34,8 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Monk outfit and cloth animation
+The hero now wears six individually articulated robe panels with gold hems, a shoulder drape, an eighteen-bead mala and two three-joint back ribbons. Gait moves the hems, running speed lifts the trailing ribbons, steering bends them and airborne poses open the robe slightly. Panels leave the lower legs visible. The outfit uses 38 additional meshes with existing cached primitive geometries and materials; posing creates no new model parts and has no physics simulation. Character collision dimensions and movement rules remain the same.
+
+Cloth animation uses the existing hero pose call, so gameplay pause freezes it and a new run/menu pose resets it deterministically. Validate with `node --test tests/*.mjs` and `node --check dist/monk.js`. Serve `dist` through a static HTTP server. Inspect the robe/beads at the shrine, then run, steer, jump and smash. Compare ribbon lift on the road and the slower roadside; pause to inspect a frozen pose. GPU visual QA and mobile performance remain manual checks.
