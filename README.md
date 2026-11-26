@@ -34,3 +34,10 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Optional synthesized sound
+Use the header's **Hang: ki / Hang: be** button to enable/mute sound. Each page load starts muted; enabling requires a direct button press. The sound setting lasts for this page session and does not modify the progression save. A short synthesized bell marks a new run; jump, staff swing, smashed objects, damage, shield protection, new fossils, creature discovery/blessing and game over have distinct cues. No audio files, external requests, music loop or account are required.
+
+AudioContext is created lazily and reused across toggles. Envelopes are quiet and shorter than 1.2 seconds; at most 16 oscillator voices are live, and mass destruction is limited to one crack per 60 ms. Ended/muted voices disconnect their nodes. Pause, the discovery book, tab hiding and restarting discard pending cues, so old sounds do not replay later. Unsupported/denied audio leaves gameplay usable; after a browser/device interruption, toggle sound off/on to retry.
+
+Run `node --test tests/*.mjs`, `node --check dist/game.js` and `node --check dist/game-audio.js`. Serve `dist`, press the sound button, start a run and try Space / J. Smash a new fossil and approach a creature to hear their discovery cues. Verify mute, pause, book and changing tabs stop pending audio. Automated tests use simulated Web Audio nodes and a renderer stub; real browser/device listening and mobile layout checks remain manual.
