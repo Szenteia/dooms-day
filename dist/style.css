@@ -18,3 +18,5 @@
   pointer-events: none;
 }
 #obstacle-status.tall { color: #ffb45e; }
+
+.header-actions{display:flex;gap:8px}#sound{font-size:12px;padding:10px 12px}#sound:disabled{opacity:.6;cursor:wait}
