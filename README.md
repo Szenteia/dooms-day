@@ -34,3 +34,10 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Next-run spirit companion
+A discovered creature can now accompany the hero as a smaller, translucent animated spirit. Open the discovery book and use **Lénytárs / Következő kör** to choose among discovered species or select **Kísérő nélkül**. The choice is stored in the existing browser save as `companion` and applies only when starting a new run. A creature found during a run cannot appear as its companion immediately. Older saves default to the first discovered species; explicit opt-out (`null`) is preserved. Invalid/locked preferences safely fall back to a discovered species or none.
+
+One non-colliding companion follows to the hero's right and slightly behind, using the existing species rig. It floats near the ground instead of copying the hero's jump, never grants extra rewards, and is excluded from encounters and obstacles. Pause/book freeze the pose; game over hides it. Same-species restarts reuse the model. Species changes and opt-out dispose only private spirit materials; shared geometry and roadside-creature materials remain intact. No new assets, dependencies or login.
+
+Run `node --test tests/*.mjs`, `node --check dist/game.js` and `node --check dist/companion.js`. Serve `dist`, meet the first fox near 72 m by moving left, then select it in the book. Start a new run to see it follow. Change to no companion during the run, verify it stays until the next start, and refresh to verify the saved preference. GPU visual QA and mobile performance still require a real browser/device check.
