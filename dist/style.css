@@ -18,3 +18,5 @@
   pointer-events: none;
 }
 #obstacle-status.tall { color: #ffb45e; }
+
+#companion-select{display:block;width:100%;margin:10px 0 16px;padding:12px;border:1px solid #e9b66a66;border-radius:8px;background:#183640;color:#fff4dc;font:inherit}#modal label[for="companion-select"]{font-size:12px;color:#efc17c}
