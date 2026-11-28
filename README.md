@@ -34,3 +34,12 @@ Validate with `node --check dist/game.js` and `node --test tests/relics.test.mjs
 
 ## Creature encounters
 Move to the side indicated by the trail hint. Passing within 2.6 m sideways and 5 m along the trail discovers the creature and saves it immediately to the existing local save. A creature first discovered during the current run grants blessings only when approached in a later run, even if it appears again on the same trail. To try the first encounter, steer left toward the creature around 72 m and open the discovery book.
+
+## Downloadable progression backup
+Open the discovery book and use **Mentés letöltése** to download `dooms-day-progress.json`. On another browser/device, open the book before starting a run and use **Mentés visszatöltése** to choose that file. Import is available only in the menu or after game over, including after an interrupted file read; it never changes an active or paused run. Imported unlocks activate on the next run.
+
+Backups use the version-1 `dooms-day` envelope and contain only saved best distance, shard balance, run count, creature IDs and fossil IDs. Page settings and unknown fields are excluded. This is a progression backup, not an in-progress run checkpoint: unsaved current-run shards/distance are not exported. There is no upload, cloud account or new dependency.
+
+Import unions discoveries and keeps the maximum of each saved counter instead of adding balances, so repeated/older imports do not erase progress or multiply shards. Only known fields, nonnegative safe integer counters and IDs 0–4 are accepted; malformed/future-version/over-64-KiB files are rejected. Storage is written before live progress is replaced; a failed browser write leaves current progress unchanged. Blob download URLs are released after use.
+
+Validate with `node --test tests/*.mjs`, `node --check dist/game.js` and `node --check dist/progress-backup.js`. Try downloading a backup, importing it into a fresh browser profile, and importing it twice. Also test a malformed JSON file, import while paused (disabled), and a browser storage failure. Tests include simulated download/file APIs and the real game entrypoint with a renderer stub. Native desktop/mobile file-picker and download behavior still require manual browser verification.

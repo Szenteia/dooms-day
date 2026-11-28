@@ -18,3 +18,5 @@
   pointer-events: none;
 }
 #obstacle-status.tall { color: #ffb45e; }
+
+.backup-actions{display:flex;flex-wrap:wrap;gap:10px}.backup-actions button{font-size:13px}.backup-actions button:disabled{opacity:.45;cursor:default}#backup-status{font-size:13px;color:#efc17c;min-height:1.4em}
